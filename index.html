@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Palette Generator</title>
+    <style>
+        body{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow-y: hidden;
+            background-color: #131313;
+        }
+
+        .container{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+            transition: all .3s ease;
+        }
+
+        #palette-container{
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            align-items: end;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .color{
+            width: 200px;
+            height: 140px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            transition: all .4s ease;
+        }
+
+        .color:hover{
+            transform: translateY(-10px);
+        }
+
+        .color .colorHex{
+            position: absolute;
+            bottom: 0;
+            width: 90%;
+            height: 15px;
+            padding: 10px;
+            text-align: center;
+            align-items: center;
+            border-bottom-left-radius: inherit;
+            border-bottom-right-radius: inherit;
+            background-color: rgba(0, 0, 0, 0.404);
+            opacity: 0;
+            transition: all .4s ease;
+            font-family: sans-serif;
+            font-weight: 200;
+            color: white;
+        }
+
+        .color:hover .colorHex{
+            opacity: 1;
+        }
+
+        #generate-btn{
+            position: relative;
+            border: none;
+            border-radius: 2px;
+            padding: 10px;
+            color: white;
+            background-color: black;
+            font-weight: 900;
+            transition: all .2s ease-in;
+        }
+
+        #generate-btn:hover{
+            background-color: transparent;
+        }
+
+        #generate-btn::after{
+            content: '';
+            position: absolute;
+            border-radius: inherit;
+            top: -4.4%;
+            left: -1.5%;
+            width: 103%;
+            height: 110%;
+            background: linear-gradient(90deg, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+            z-index: -1;
+        }
+
+        .notification{
+            position: absolute;
+            background-color: #e4e3d9;
+            padding:20px 40px;
+            border-radius: 40px;
+            font-weight: 700;
+            text-transform: capitalize;
+            transition: all .4s ease-in-out;
+            opacity: 0;
+            top: -100px;
+        }
+
+        .show{
+            opacity: 1;
+            top: 10px;
+        }
+
+        
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="palette-container">
+            <span id="color1" name="color" class="color" onclick="copy(0)"><span class="colorHex" name="colorHex"></span></span>
+            <span id="color2" name="color" class="color" onclick="copy(1)"><span class="colorHex" name="colorHex"></span></span>
+            <span id="color3" name="color" class="color" onclick="copy(2)"><span class="colorHex" name="colorHex"></span></span>
+            <span id="color4" name="color" class="color" onclick="copy(3)"><span class="colorHex" name="colorHex"></span></span>
+            <span id="color5" name="color" class="color" onclick="copy(4)"><span class="colorHex" name="colorHex"></span></span>
+        </div>
+        <button id="generate-btn" onclick="setColors()">Generate New Colors</button>
+        <div id="notification" class="notification" style="font-family: sans-serif;">Copied to clipboard!</div>
+    </div>
+
+    <script>
+        let colors = document.getElementsByName('color');
+        let notification = document.getElementById('notification');
+        let colorHex = document.getElementsByName("colorHex");
+        let random;
+        let hex;
+        let HexColor = [];
+
+        function getRandomHex(){
+           hex ='#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+        }
+
+        function setColors(){
+            for(let i = 0; i < colors.length; i++){
+                getRandomHex();
+                colors[i].style.backgroundColor = hex;
+                colorHex[i].innerHTML = hex;
+                HexColor[i] = hex;
+            }
+        }
+        
+        setColors();
+
+        function copy(ele){
+            navigator.clipboard.writeText(String(HexColor[ele]));
+            notification.classList.add('show');
+            setTimeout(fun => {
+                notification.classList.remove('show');
+            },1000);
+        }
+    </script>
+</body>
+</html>
